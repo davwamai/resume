@@ -1,0 +1,140 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%            READ THIS TO GET IT TO COMPILE CORRECTLY                %%%%%%%%%%%%
+%%%%%%%%                                                                    %%%%%%%%%%%%
+%%%%%%%%                                                                    %%%%%%%%%%%%
+%%%%%%%% To get it to compile it is a 3-step process                        %%%%%%%%%%%%
+%%%%%%%% 1) Build and compile (F5 in TexStudio) to generate the .aux file   %%%%%%%%%%%%
+%%%%%%%% 2) Run bibtex (F8 or Tools>Commands>BibTeX in TexStudio)           %%%%%%%%%%%%
+%%%%%%%% 1) Build and compile (F5 in TexStudio) to generate the PDF         %%%%%%%%%%%%
+%%%%%%%% 																	%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[letterpaper]{moderncv}
+
+%%%%%%%%%%%%%% define the colors of the CV  %%%%%%%%%%%%%%%%%
+% must be done before setting the style of the CV
+\definecolor{color1}{RGB}{160 0, 10} % USC Garnet, with a little more red
+\definecolor{color2}{RGB}{0,0,0} % black used for title 
+\newcommand{\blueLink}[1]{\textcolor[rgb]{0.02,0.27,0.68}{#1}} %blue used for external links
+
+%%%%%%%%%%%%%% Set the style of the CV  %%%%%%%%%%%%%%%%%
+\moderncvstyle{classic} 
+
+%%%%%%%%%%%%%% adding packages for BibTeX publications  %%%%%%%%%%%%%%%%%
+\usepackage{url}
+\usepackage{bibentry}
+\makeatletter\let\saved@bibitem\@bibitem\makeatother
+%\usepackage[colorlinks=true,breaklinks=true]{hyperref}		% commented out as is already in modern CV
+\makeatletter\let\@bibitem\saved@bibitem\makeatother
+\usepackage[numbers]{natbib}											% added to get rid of the "\lonely item" error. everything in this list works [square,sort,comma,numbers]
+
+%%%%%%%%%%%%%% adding packages for formatting and other basic functions  %%%%%%%%%%%%%%%%%
+\usepackage[left=0.5in, right=1in, top=1in, bottom=1in]{geometry} % defining the page margins
+\usepackage[bottom]{footmisc}	% added for the footnote to allow the date on the last page
+\usepackage{enumitem}			% added for adjusting the indent of publications. adjusted locally at each list
+\usepackage{adjustbox}
+\usepackage{lmodern} % Added August 2024 after an update in some package caused the error "pdfTeX error (font expansion): auto expansion is only possible with scalable".
+
+%%%%%%%%%%%%%% Added to break long URLs in Bibtex  %%%%%%%%%%%%%%%%%
+% taken from:
+% 1) user570593 in https://tex.stackexchange.com/questions/115690/urls-in-bibliography-latex-not-breaking-line-as-expected
+% 2) https://norwied.wordpress.com/2012/07/10/how-to-break-long-urls-in-bibtex/
+% Note that I get conflicts if I add the hyperref package
+\def\UrlBreaks{\do\/\do-}
+\usepackage{breakurl}
+
+%%%%%%%%%%%%%%  a reimplementation of etaremune using enumitem that enables custom labels %%%%%%%%%%%%%%%%%
+\usepackage{refcount}
+\makeatletter
+\AddEnumerateCounter*{\reversearabic}{\@reversearabic}{2}
+\newcommand{\reversearabic}[1]{\expandafter\@reversearabic\csname c@#1\endcsname}
+\newcommand{\@reversearabic}[1]{%
+  \number\numexpr\getrefnumber{this@etaremune@\romannumeral\c@etaremune}-#1+1\relax
+}
+\newcounter{etaremune}
+\newenvironment{etaremune}[1][]{%
+  \stepcounter{etaremune}%
+  \begin{enumerate}[label=\reversearabic*.,#1]%
+}{%
+  \edef\@currentlabel{\the\csname c@\@enumctr\endcsname}%
+  \label{this@etaremune@\romannumeral\c@etaremune}%
+  \end{enumerate}%
+}
+\makeatother
+
+
+%%%%%%%%%%%%%% Setting up the document  %%%%%%%%%%%%%%%%%
+
+\setlength{\hintscolumnwidth}{2.9cm} % change width of left colomn
+
+% Build a command for the date-modified footnote
+\newcommand\blfootnote[1]{%
+ \begingroup
+ \renewcommand\thefootnote{}\footnote{#1}%
+ \addtocounter{footnote}{-1}%
+ \endgroup
+}
+
+
+
+%% define the personal data used in the CV
+\firstname{David}
+\familyname{Wamai}
+\title{Resume}
+\address{University of South Carolina}{Columbia, SC}
+\email{dwamai@email.sc.edu}
+%\homepage{www.Research.University.edu}
+\extrainfo{\faGithub \hspace{0.01ex} \httplink{github.com/davwamai} \\
+\faLinkedin \hspace{0.01ex} \httplink{www.linkedin.com/in/davwamai}
+}
+
+% PDF metadata
+\AfterPreamble{\hypersetup{
+ pdfauthor={David Wamai},
+ pdftitle={CV for David Wamai},
+ pdfsubject={Detailed academic resume for David Wamai},
+ urlcolor=blue,colorlinks=blue
+}}
+
+\begin{document}
+	\makecvtitle
+	\nobibliography{publications}
+	\bibliographystyle{plainurl}%unsrt} % plain works
+
+	\section{Education}
+		\cvitem{2020 - 2024}{\textbf{B.S.}, Computer Science, University of South Carolina Columbia.}
+
+	\section{Research Experience}
+    \cvitem{\textbf{Research Assistant}}{\textbf{Adaptive Real-Time Systems Laboratory}, University of South Carolina Columbia.}
+
+  \section{Non-Academic Experience}
+    \cvitem{2024 - Present}{\textbf{Embedded Systems Engineer}, Inventions Unlimited, LLC. Columbia, SC.}
+
+  \section{Awards and Honors}
+	
+  \section{Conference Proceedings}
+
+  \begin{etaremune}[label={[\reversearabic*]},itemsep=1ex, leftmargin=3.2cm,labelsep=0.3cm,midpenalty=-9000]
+    \item \bibentry{10.1117/12.3016172}
+    \item \bibentry{10.1117/12.3013712}
+  \end{etaremune}
+
+  \section{Posters}
+
+  \begin{etaremune}[label={[\reversearabic*]},itemsep=1ex, leftmargin=3.2cm,labelsep=0.3cm,midpenalty=-9000]
+      \item \bibentry{PosterUSCSRS2024}
+			\item \bibentry{PosterDUSC2024}
+			\item \bibentry{PosterUSCSRS2023}
+			\item \bibentry{PosterUSCSRS20232}
+	\end{etaremune}
+
+	\section{Open Source Hardware}
+	
+		\begin{etaremune}[label={[\reversearabic*]},itemsep=1ex, leftmargin=3.2cm,labelsep=0.3cm,midpenalty=-9000]
+      \item \bibentry{ARTSLabSignalProcessingInstrument}
+			\item \bibentry{Wamai2023BiphasicDataAcquisition}
+		\end{etaremune}
+			
+		\blfootnote{Last updated on \today} %\vspace{-\baselineskip}
+
+\end{document}
